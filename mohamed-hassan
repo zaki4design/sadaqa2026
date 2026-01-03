@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>صدقة جارية</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Amiri&display=swap');
+
+body{
+    font-family:'Amiri',serif;
+    background:#f3f7f5;
+    margin:0;
+    padding:0;
+}
+
+.container{
+    max-width:850px;
+    margin:40px auto;
+    background:#fff;
+    padding:30px;
+    border-radius:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+h1{
+    text-align:center;
+    color:#2f8f6b;
+    margin-bottom:10px;
+}
+
+.note{
+    text-align:center;
+    color:#777;
+    margin-bottom:25px;
+}
+
+input{
+    width:100%;
+    padding:15px;
+    font-size:18px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    margin-bottom:15px;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    font-size:18px;
+    border:none;
+    border-radius:10px;
+    background:#2f8f6b;
+    color:#fff;
+    cursor:pointer;
+    margin-bottom:10px;
+}
+
+button.share{
+    background:#555;
+}
+
+.section{
+    margin-top:30px;
+    display:none;
+}
+
+.ayah{
+    font-size:22px;
+    line-height:2.2;
+    margin-bottom:20px;
+    color:#333;
+}
+
+.dua{
+    background:#f0faf6;
+    padding:20px;
+    border-right:6px solid #2f8f6b;
+    border-radius:10px;
+    font-size:20px;
+    margin-bottom:25px;
+}
+
+.azkar{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+}
+
+.zikr{
+    background:#fafafa;
+    border-radius:12px;
+    padding:15px;
+    text-align:center;
+    border:1px solid #eee;
+    cursor:pointer;
+}
+
+.zikr span{
+    display:block;
+    font-size:22px;
+    color:#2f8f6b;
+    margin-top:8px;
+}
+
+.footer{
+    margin-top:30px;
+    text-align:center;
+    color:#888;
+    font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>صدقة جارية</h1>
+    <p class="note">اكتب اسم المتوفّى وشارك الرابط ليقرأ الجميع له</p>
+
+    <input type="text" id="name" placeholder="اسم المتوفّى كاملًا">
+
+    <button onclick="start()">ابدأ القراءة</button>
+    <button class="share" onclick="shareLink()">مشاركة الرابط بالاسم</button>
+
+    <div class="section" id="content">
+
+        <div class="ayah">
+            ﴿ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ﴾<br>
+            ﴿ كُلُّ نَفْسٍ ذَائِقَةُ الْمَوْتِ ﴾<br>
+            ﴿ رَبِّ اغْفِرْ وَارْحَمْ وَأَنتَ خَيْرُ الرَّاحِمِينَ ﴾
+        </div>
+
+        <div class="dua" id="dua"></div>
+
+        <h3 style="color:#2f8f6b">الأذكار (اضغط للتسبيح)</h3>
+
+        <div class="azkar">
+            <div class="zikr" onclick="count(this)">سبحان الله<span>0</span></div>
+            <div class="zikr" onclick="count(this)">الحمد لله<span>0</span></div>
+            <div class="zikr" onclick="count(this)">الله أكبر<span>0</span></div>
+            <div class="zikr" onclick="count(this)">لا إله إلا الله<span>0</span></div>
+            <div class="zikr" onclick="count(this)">أستغفر الله<span>0</span></div>
+            <div class="zikr" onclick="count(this)">اللهم صلِّ على محمد<span>0</span></div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        جعلها الله في ميزان حسناتكم 🤍
+    </div>
+</div>
+
+<script>
+function start(n=null){
+    const input=document.getElementById("name");
+    const name=n||input.value.trim();
+    if(!name){alert("من فضلك اكتب اسم المتوفّى");return;}
+
+    input.value=name;
+    document.getElementById("content").style.display="block";
+
+    document.getElementById("dua").innerHTML=
+    `اللهم اغفر لـ <strong>${name}</strong>، وارحمه، وعافه، واعفُ عنه،
+    وأكرم نزله، ووسّع مدخله، واغسله بالماء والثلج والبرد،
+    ونقِّه من الخطايا كما نقيت الثوب الأبيض من الدنس،
+    وأبدله دارًا خيرًا من داره، وأهلاً خيرًا من أهله،
+    وأدخله الجنة، وأعذه من عذاب القبر وعذاب النار.`;
+}
+
+function shareLink(){
+    const name=document.getElementById("name").value.trim();
+    if(!name){alert("اكتب الاسم الأول");return;}
+
+    const url=location.origin+location.pathname+"?name="+encodeURIComponent(name);
+
+    if(navigator.share){
+        navigator.share({
+            title:"صدقة جارية",
+            text:"اقرأ القرآن واذكر الله واهدِ الأجر للمتوفّى",
+            url:url
+        });
+    }else{
+        navigator.clipboard.writeText(url);
+        alert("تم نسخ الرابط للمشاركة");
+    }
+}
+
+function count(el){
+    const span=el.querySelector("span");
+    span.innerText=parseInt(span.innerText)+1;
+}
+
+// تحميل الاسم تلقائيًا من الرابط
+const q=new URLSearchParams(location.search).get("name");
+if(q) start(q);
+</script>
+
+</body>
+</html>
